@@ -2,7 +2,10 @@
   "mcpServers": {
     "corsoul": {
       "type": "http",
-      "url": "http://127.0.0.1:3848/mcp"
+      "url": "http://127.0.0.1:3848/mcp",
+      "headers": {
+        "x-corsoul-channel-label": "codex"
+      }
     }
   }
 }

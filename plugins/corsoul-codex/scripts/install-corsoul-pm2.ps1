@@ -4,7 +4,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$CorsoulVersion = '0.1.12'
+$CorsoulVersion = '0.1.19'
 $Pm2Version = '7.0.3'
 $ProcessName = 'corsoul-mcp'
 $HealthUrl = 'http://127.0.0.1:3848/health'

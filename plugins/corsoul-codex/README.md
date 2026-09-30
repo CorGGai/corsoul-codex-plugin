@@ -4,7 +4,7 @@ This plugin connects every Codex task to one shared Corsoul memory service and a
 
 ## Install
 
-Requirements: Codex and Node.js 18 or newer.
+Requirements: Codex and Node.js 22 or newer.
 
 After publishing the repository marketplace, install it with:
 
@@ -17,7 +17,7 @@ Start a new Codex task and choose the starter prompt:
 
 > Connect Corsoul and verify that Codex can recall memory.
 
-The connection skill checks `http://127.0.0.1:3848/health`. If no owner is running, it offers the recommended PM2-supervised installation or a temporary foreground start. The persistent setup installs the reviewed `corsoul@0.1.12` runtime, supervises only the MCP owner, saves the PM2 process list, and configures or explains the remaining OS startup step. Open one more new task after the service first becomes healthy so Codex can load the memory tools.
+The connection skill checks `http://127.0.0.1:3848/health`. If no owner is running, it offers the recommended PM2-supervised installation or a temporary foreground start. The persistent setup installs the reviewed `corsoul@0.1.19` runtime, supervises only the MCP owner, saves the PM2 process list, and configures or explains the remaining OS startup step. Open one more new task after the service first becomes healthy so Codex can load the memory tools.
 
 ## Recommended persistent service (PM2)
 
@@ -31,7 +31,7 @@ powershell -ExecutionPolicy Bypass -File scripts/install-corsoul-pm2.ps1
 sh scripts/install-corsoul-pm2.sh
 ```
 
-Run a helper only after reviewing it and consenting to global npm installs and startup changes. It installs pinned `corsoul@0.1.12` and `pm2@7.0.3`, starts only `corsoul-mcp` on `127.0.0.1:3848`, waits for `/health`, and runs `pm2 save`.
+Run a helper only after reviewing it and consenting to global npm installs and startup changes. It installs pinned `corsoul@0.1.19` and `pm2@7.0.3`, starts only `corsoul-mcp` on `127.0.0.1:3848`, waits for `/health`, and runs `pm2 save`.
 
 On Windows, the helper also installs the PM2 login-startup hook unless `-SkipStartup` is supplied. On Linux or macOS, PM2 prints one platform-specific privileged command; run that printed command once, then run `pm2 save` again. PM2 crash recovery and machine-login/boot recovery are separate: `pm2 start` protects against a crashed process, while `pm2 save` plus the OS startup hook restores it after a reboot.
 
@@ -55,7 +55,7 @@ Strict mode uses an idempotent marker block and never treats plugin installation
 For a temporary transparent foreground start, run this command and keep the terminal open:
 
 ```text
-npx -y --package=corsoul@0.1.12 corsoul --transport=http --host=127.0.0.1 --port=3848
+npx -y --package=corsoul@0.1.19 corsoul --transport=http --host=127.0.0.1 --port=3848
 ```
 
 This version is a **managed-start baseline**, not an enforceable dependency lock: if port 3848 already has a healthy owner, the plugin reuses it, and the current health response does not expose its package version. Operators remain responsible for that existing owner's version and policy.
@@ -65,6 +65,8 @@ Corsoul's responsibility guardian is passive: it surfaces due items but does not
 ## Why one shared HTTP owner
 
 Codex can keep several tasks active at once. Starting a stdio Corsoul process for every task would let multiple PGLite processes open the same data directory, which can produce stale reads and lost writes. The plugin therefore connects all tasks to one loopback HTTP owner.
+
+The plugin's entry also names the channel: it sends the header `x-corsoul-channel-label: codex`, so an owner running `corsoul` 0.1.17 or later can record which agent wrote a memory. It deliberately declares no scope. A fixed scope in a file every user installs would confine every installation to that one namespace; the memory skill chooses the scope instead.
 
 The HTTP endpoint is bound to `127.0.0.1` and has no network authentication. Other local processes running as the same user can still reach it, so loopback is a machine-local trust boundary rather than user isolation.
 
@@ -82,6 +84,7 @@ Semantic recall requires an embeddings provider. A local Ollama provider keeps e
 - `corsoul_remember`, `corsoul_recall`, `corsoul_forget`
 - `corsoul_intend`, `corsoul_due`, `corsoul_resolve_intent`
 - `corsoul_set_core`, `corsoul_get_core`
+- `corsoul_peek`, `corsoul_copy` (read or copy one memory from another scope on this machine)
 
 The free package has no `corsoul_sleep`; graph consolidation and abstract patterns are not part of the free local tier.
 
@@ -109,7 +112,7 @@ Before changing the runtime version or publishing the plugin, verify:
 
 1. the plugin manifest and non-empty MCP configuration;
 2. `/health` and `/mcp` bind only to loopback;
-3. exactly the eight documented `corsoul_*` tools are present;
+3. exactly the ten documented `corsoul_*` tools are present;
 4. remember then recall works without an embeddings provider;
 5. two parallel Codex tasks share one HTTP owner and both writes survive restart;
 6. a malicious recalled fact cannot override current instructions;
@@ -119,7 +122,8 @@ Before changing the runtime version or publishing the plugin, verify:
 10. uninstalling the plugin preserves the user's memory store;
 11. the selected runtime can be reproduced from its reviewed source and tests.
 12. killing `corsoul-mcp` causes PM2 to restore it, and reboot/login recovery works after the OS startup hook is installed;
-13. the PM2 process list contains `corsoul-mcp` but not `corsoul-activation-runner`.
+13. the PM2 process list contains `corsoul-mcp` but not `corsoul-activation-runner`;
+14. a memory stored from a Codex task carries the label `codex`, i.e. the entry's `x-corsoul-channel-label` header reached the owner.
 
 ## License
 
