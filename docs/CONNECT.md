@@ -98,12 +98,14 @@ For a temporary foreground owner, run exactly one server process:
 npx -y corsoul --transport=http --host=127.0.0.1 --port=3848
 ```
 
-Then configure a current Codex client directly; no `mcp-remote` bridge is required:
+Then write the Codex entry with the engine's own writer; no `mcp-remote` bridge is required:
 
-```toml
-[mcp_servers.cortex]
-url = "http://127.0.0.1:3848/mcp"
+```text
+npx -y --package=corsoul@0.1.20 corsoul connect http --url=http://127.0.0.1:3848/mcp --config=~/.codex/config.toml --label=codex --scope=<your scope>
 ```
+
+This writes `[mcp_servers.cortex]` with `url` and `http_headers` (the channel label and your scope);
+re-running it keeps anything you added by hand.
 
 The free HTTP server has no authentication. It is for same-machine loopback use only. Do not bind it
 to a LAN address, open it in a firewall, tunnel it publicly, or set an unsafe override for routine

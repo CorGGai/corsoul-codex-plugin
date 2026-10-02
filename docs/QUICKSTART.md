@@ -5,7 +5,7 @@ a license, or the proprietary engine.
 
 ## 1. Check the prerequisite
 
-Install Node.js 18 or newer, then verify:
+Install Node.js 22 or newer, then verify:
 
 ```text
 node --version

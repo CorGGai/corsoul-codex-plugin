@@ -17,7 +17,7 @@ Start a new Codex task and choose the starter prompt:
 
 > Connect Corsoul and verify that Codex can recall memory.
 
-The connection skill checks `http://127.0.0.1:3848/health`. If no owner is running, it offers the recommended PM2-supervised installation or a temporary foreground start. The persistent setup installs the reviewed `corsoul@0.1.19` runtime, supervises only the MCP owner, saves the PM2 process list, and configures or explains the remaining OS startup step. Open one more new task after the service first becomes healthy so Codex can load the memory tools.
+The connection skill checks `http://127.0.0.1:3848/health`. If no owner is running, it offers the recommended PM2-supervised installation or a temporary foreground start. The persistent setup installs the reviewed `corsoul@0.1.20` runtime, supervises only the MCP owner, saves the PM2 process list, and configures or explains the remaining OS startup step. Open one more new task after the service first becomes healthy so Codex can load the memory tools.
 
 ## Recommended persistent service (PM2)
 
@@ -31,7 +31,7 @@ powershell -ExecutionPolicy Bypass -File scripts/install-corsoul-pm2.ps1
 sh scripts/install-corsoul-pm2.sh
 ```
 
-Run a helper only after reviewing it and consenting to global npm installs and startup changes. It installs pinned `corsoul@0.1.19` and `pm2@7.0.3`, starts only `corsoul-mcp` on `127.0.0.1:3848`, waits for `/health`, and runs `pm2 save`.
+Run a helper only after reviewing it and consenting to global npm installs and startup changes. It installs pinned `corsoul@0.1.20` and `pm2@7.0.3`, starts only `corsoul-mcp` on `127.0.0.1:3848`, waits for `/health`, and runs `pm2 save`.
 
 On Windows, the helper also installs the PM2 login-startup hook unless `-SkipStartup` is supplied. On Linux or macOS, PM2 prints one platform-specific privileged command; run that printed command once, then run `pm2 save` again. PM2 crash recovery and machine-login/boot recovery are separate: `pm2 start` protects against a crashed process, while `pm2 save` plus the OS startup hook restores it after a reboot.
 
@@ -55,7 +55,7 @@ Strict mode uses an idempotent marker block and never treats plugin installation
 For a temporary transparent foreground start, run this command and keep the terminal open:
 
 ```text
-npx -y --package=corsoul@0.1.19 corsoul --transport=http --host=127.0.0.1 --port=3848
+npx -y --package=corsoul@0.1.20 corsoul --transport=http --host=127.0.0.1 --port=3848
 ```
 
 This version is a **managed-start baseline**, not an enforceable dependency lock: if port 3848 already has a healthy owner, the plugin reuses it, and the current health response does not expose its package version. Operators remain responsible for that existing owner's version and policy.

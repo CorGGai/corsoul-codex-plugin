@@ -14,7 +14,7 @@ bounded personality capabilities.
 
 ## Start free
 
-Requires Node.js 18 or newer.
+Requires Node.js 22 or newer.
 
 For Codex, install the repository plugin instead of creating one stdio/PGLite process per task:
 
@@ -50,10 +50,10 @@ In current 0.1.x releases, selecting keyword-only does not erase provider values
 setup. Follow the [switching instructions](docs/QUICKSTART.md#2-choose-recall-mode) when changing an
 existing installation.
 
-The free MCP server exposes eight tools:
+The free MCP server exposes ten tools:
 
 `corsoul_remember` · `corsoul_recall` · `corsoul_forget` · `corsoul_intend` · `corsoul_due` ·
-`corsoul_resolve_intent` · `corsoul_set_core` · `corsoul_get_core`
+`corsoul_resolve_intent` · `corsoul_set_core` · `corsoul_get_core` · `corsoul_peek` · `corsoul_copy`
 
 The public Node SDK is equally small:
 

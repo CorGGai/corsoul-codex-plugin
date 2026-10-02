@@ -86,12 +86,14 @@ Windows 若找不到 `npx`，改用 `command = "npx.cmd"`。儲存後重啟 Code
 npx -y corsoul --transport=http --host=127.0.0.1 --port=3848
 ```
 
-目前 Codex 可原生連 Streamable HTTP，不需要 `mcp-remote`：
+目前 Codex 可原生連 Streamable HTTP，不需要 `mcp-remote`。用引擎自己的寫入器寫 Codex 的設定：
 
-```toml
-[mcp_servers.cortex]
-url = "http://127.0.0.1:3848/mcp"
+```text
+npx -y --package=corsoul@0.1.20 corsoul connect http --url=http://127.0.0.1:3848/mcp --config=~/.codex/config.toml --label=codex --scope=<your scope>
 ```
+
+這會寫入 `[mcp_servers.cortex]`，帶 `url` 與 `http_headers`（channel 標籤與你的 scope）；
+重跑時會保留你手動加的內容。
 
 免費 HTTP server **沒有驗證**，只可留在同機 loopback。不要綁 LAN 位址、開防火牆、
 公開 tunnel，或把 unsafe override 當作日常配置。
