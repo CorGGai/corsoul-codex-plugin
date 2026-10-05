@@ -11,7 +11,7 @@ $ErrorActionPreference = 'Stop'
 # current directory too. (The same line opens the engine's start-corsoul-brain.ps1.)
 $env:NoDefaultCurrentDirectoryInExePath = '1'
 
-$CorsoulVersion = '0.1.20'
+$CorsoulVersion = '0.1.21'
 $Pm2Version = '7.0.3'
 $ProcessName = 'corsoul-mcp'
 $HealthUrl = 'http://127.0.0.1:3848/health'

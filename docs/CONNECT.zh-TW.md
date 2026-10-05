@@ -38,7 +38,7 @@ sh plugins/corsoul-codex/scripts/install-corsoul-pm2.sh
 ## 隔離式單一 client：CLI 連接器
 
 ```text
-npx -y corsoul connect codex --scope=myapp:assistant:v1
+npx -y --package=corsoul@0.1.21 corsoul connect codex --scope=myapp:assistant:v1
 ```
 
 支援 `codex`、`claude-code`、`cursor`、`cline`、`claude-desktop` 與 `openclaw`。
@@ -83,13 +83,13 @@ Windows 若找不到 `npx`，改用 `command = "npx.cmd"`。儲存後重啟 Code
 若只需臨時前台服務，只啟動一個 loopback server：
 
 ```text
-npx -y corsoul --transport=http --host=127.0.0.1 --port=3848
+npx -y --package=corsoul@0.1.21 corsoul --transport=http --host=127.0.0.1 --port=3848
 ```
 
 目前 Codex 可原生連 Streamable HTTP，不需要 `mcp-remote`。用引擎自己的寫入器寫 Codex 的設定：
 
 ```text
-npx -y --package=corsoul@0.1.20 corsoul connect http --url=http://127.0.0.1:3848/mcp --config=~/.codex/config.toml --label=codex --scope=<your scope>
+npx -y --package=corsoul@0.1.21 corsoul connect http --url=http://127.0.0.1:3848/mcp --config=~/.codex/config.toml --label=codex --scope=<your scope>
 ```
 
 這會寫入 `[mcp_servers.cortex]`，帶 `url` 與 `http_headers`（channel 標籤與你的 scope）；
@@ -113,7 +113,7 @@ bearer_token_env_var = "CORSOUL_MCP_TOKEN"
 ## 驗證
 
 ```text
-npx -y corsoul doctor
+npx -y --package=corsoul@0.1.21 corsoul doctor
 ```
 
 重啟 client 後，用同一 scope 做一次 remember → recall，再開新 session 召回一次。若多個

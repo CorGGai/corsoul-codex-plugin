@@ -38,7 +38,7 @@ The helper must install the reviewed compatibility version, start exactly one `c
 For temporary mode, run:
 
 ```text
-npx -y --package=corsoul@0.1.20 corsoul --transport=http --host=127.0.0.1 --port=3848
+npx -y --package=corsoul@0.1.21 corsoul --transport=http --host=127.0.0.1 --port=3848
 ```
 
 Keep it in the foreground unless the user explicitly requests a temporary detached process. On Windows, a user-approved detached process may be launched hidden. Keep stdout and stderr out of the MCP protocol stream and preserve a useful log when practical. Do not pass `DATABASE_URL` unless the user explicitly chooses Postgres.

@@ -15,7 +15,7 @@ npm --version
 ## 2. Choose recall mode
 
 ```text
-npx -y corsoul setup
+npx -y --package=corsoul@0.1.21 corsoul setup
 ```
 
 Choose one of:
@@ -53,23 +53,23 @@ Change to the project that should receive the agent instructions, then pick one 
 same agent or subject:
 
 ```text
-npx -y corsoul connect codex --scope=myapp:assistant:v1
+npx -y --package=corsoul@0.1.21 corsoul connect codex --scope=myapp:assistant:v1
 ```
 
 Other supported targets:
 
 ```text
-npx -y corsoul connect claude-code --scope=myapp:assistant:v1
-npx -y corsoul connect cursor --scope=myapp:assistant:v1
-npx -y corsoul connect cline --scope=myapp:assistant:v1
-npx -y corsoul connect claude-desktop --scope=myapp:assistant:v1
-npx -y corsoul connect openclaw --scope=myapp:assistant:v1
+npx -y --package=corsoul@0.1.21 corsoul connect claude-code --scope=myapp:assistant:v1
+npx -y --package=corsoul@0.1.21 corsoul connect cursor --scope=myapp:assistant:v1
+npx -y --package=corsoul@0.1.21 corsoul connect cline --scope=myapp:assistant:v1
+npx -y --package=corsoul@0.1.21 corsoul connect claude-desktop --scope=myapp:assistant:v1
+npx -y --package=corsoul@0.1.21 corsoul connect openclaw --scope=myapp:assistant:v1
 ```
 
 Preview without writing:
 
 ```text
-npx -y corsoul connect codex --scope=myapp:assistant:v1 --dry-run
+npx -y --package=corsoul@0.1.21 corsoul connect codex --scope=myapp:assistant:v1 --dry-run
 ```
 
 The connector can write host instructions in the current project. For Codex, that is `AGENTS.md`;
@@ -83,7 +83,7 @@ loopback HTTP, and Windows notes.
 ## 4. Verify
 
 ```text
-npx -y corsoul doctor
+npx -y --package=corsoul@0.1.21 corsoul doctor
 ```
 
 `doctor` validates the configured store mode and embedding provider, but it does not open an external

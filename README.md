@@ -36,9 +36,9 @@ will show the target file, managed block, and diff, then wait for confirmation.
 For other clients or an intentionally isolated single process, the CLI connector remains available:
 
 ```text
-npx -y corsoul setup
-npx -y corsoul connect cursor --scope=myapp:assistant:v1
-npx -y corsoul doctor
+npx -y --package=corsoul@0.1.21 corsoul setup
+npx -y --package=corsoul@0.1.21 corsoul connect cursor --scope=myapp:assistant:v1
+npx -y --package=corsoul@0.1.21 corsoul doctor
 ```
 
 `setup` lets you choose local Ollama, OpenAI, another OpenAI-compatible embedding endpoint, or

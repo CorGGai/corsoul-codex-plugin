@@ -39,7 +39,7 @@ preview plus explicit confirmation before modifying the effective Codex instruct
 ## Connector for isolated clients
 
 ```text
-npx -y corsoul connect codex --scope=myapp:assistant:v1
+npx -y --package=corsoul@0.1.21 corsoul connect codex --scope=myapp:assistant:v1
 ```
 
 Run the command from the project that should receive the host contract. Codex writes or merges
@@ -95,13 +95,13 @@ share one PGLite directory.
 For a temporary foreground owner, run exactly one server process:
 
 ```text
-npx -y corsoul --transport=http --host=127.0.0.1 --port=3848
+npx -y --package=corsoul@0.1.21 corsoul --transport=http --host=127.0.0.1 --port=3848
 ```
 
 Then write the Codex entry with the engine's own writer; no `mcp-remote` bridge is required:
 
 ```text
-npx -y --package=corsoul@0.1.20 corsoul connect http --url=http://127.0.0.1:3848/mcp --config=~/.codex/config.toml --label=codex --scope=<your scope>
+npx -y --package=corsoul@0.1.21 corsoul connect http --url=http://127.0.0.1:3848/mcp --config=~/.codex/config.toml --label=codex --scope=<your scope>
 ```
 
 This writes `[mcp_servers.cortex]` with `url` and `http_headers` (the channel label and your scope);
@@ -128,7 +128,7 @@ itself is not access control.
 ## Verify
 
 ```text
-npx -y corsoul doctor
+npx -y --package=corsoul@0.1.21 corsoul doctor
 ```
 
 After restarting the client, remember and recall one fact using the same scope. This round trip—not
