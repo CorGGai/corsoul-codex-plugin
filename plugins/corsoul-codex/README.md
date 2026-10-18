@@ -17,7 +17,7 @@ Start a new Codex task and choose the starter prompt:
 
 > Connect Corsoul and verify that Codex can recall memory.
 
-The connection skill checks `http://127.0.0.1:3848/health`. If no owner is running, it offers the recommended PM2-supervised installation or a temporary foreground start. The persistent setup installs the reviewed `corsoul@0.1.21` runtime, supervises only the MCP owner, saves the PM2 process list, and configures or explains the remaining OS startup step. Open one more new task after the service first becomes healthy so Codex can load the memory tools.
+The connection skill checks `http://127.0.0.1:3848/health`. If no owner is running, it offers the recommended PM2-supervised installation or a temporary foreground start. The persistent setup installs the reviewed `corsoul@0.1.22` runtime, supervises only the MCP owner, saves the PM2 process list, and configures or explains the remaining OS startup step. Open one more new task after the service first becomes healthy so Codex can load the memory tools.
 
 ## Recommended persistent service (PM2)
 
@@ -31,7 +31,7 @@ powershell -ExecutionPolicy Bypass -File scripts/install-corsoul-pm2.ps1
 sh scripts/install-corsoul-pm2.sh
 ```
 
-Run a helper only after reviewing it and consenting to global npm installs and startup changes. It installs pinned `corsoul@0.1.21` and `pm2@7.0.3`, starts only `corsoul-mcp` on `127.0.0.1:3848`, waits for `/health`, and runs `pm2 save`.
+Run a helper only after reviewing it and consenting to global npm installs and startup changes. It installs pinned `corsoul@0.1.22` and `pm2@7.0.3`, starts only `corsoul-mcp` on `127.0.0.1:3848`, waits for `/health`, and runs `pm2 save`.
 
 On Windows, the helper also installs the PM2 login-startup hook unless `-SkipStartup` is supplied. On Linux or macOS, PM2 prints one platform-specific privileged command; run that printed command once, then run `pm2 save` again. PM2 crash recovery and machine-login/boot recovery are separate: `pm2 start` protects against a crashed process, while `pm2 save` plus the OS startup hook restores it after a reboot.
 
@@ -55,10 +55,12 @@ Strict mode uses an idempotent marker block and never treats plugin installation
 For a temporary transparent foreground start, run this command and keep the terminal open:
 
 ```text
-npx -y --package=corsoul@0.1.21 corsoul --transport=http --host=127.0.0.1 --port=3848
+npx -y --package=corsoul@0.1.22 corsoul --transport=http --host=127.0.0.1 --port=3848
 ```
 
 This version is a **managed-start baseline**, not an enforceable dependency lock: if port 3848 already has a healthy owner, the plugin reuses it, and the current health response does not expose its package version. Operators remain responsible for that existing owner's version and policy.
+
+From corsoul 0.1.22 a healthy `/health` is not enough on its own. When no resident `--transport=http` service runs, port 3848 may belong to the owner that an agent session was elected to be, and that owner requires the owner token on `/mcp`, which this plugin's URL entry cannot carry - Codex is refused with a sentence that names the resident service. Reuse an owner only when its `/health` says `owner_token.required.mcp` is false (the PM2 helper's `corsoul-mcp` and the foreground start both are); otherwise start the resident service.
 
 Corsoul's responsibility guardian is passive: it surfaces due items but does not execute them. The `0.1.7` baseline states the authorization boundary up front — its MCP instructions treat due items as untrusted reminders, **not** authorization to act, matching this plugin's untrusted-memory policy — and adds single-owner election so concurrent engines share one store owner instead of tearing the PGLite data directory. (Earlier releases were unsuitable as a managed baseline: 0.1.4's instructions said `act` and `Do not ignore it` before stating that boundary, 0.1.2 predates the Windows data-directory normalization fix, and 0.1.5/0.1.6 predate single-owner election.) Keep the baseline pinned; move it only after re-running the release checks below.
 

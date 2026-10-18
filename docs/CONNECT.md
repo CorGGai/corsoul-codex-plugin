@@ -15,6 +15,8 @@ plugin connects all Codex tasks to one shared `http://127.0.0.1:3848/mcp` owner;
 separate PGLite process for every task. See the [plugin README](../plugins/corsoul-codex/README.md)
 for startup, privacy, managed-start baseline, and migration details.
 
+From corsoul 0.1.22 a healthy `/health` is not enough on its own. When no resident `--transport=http` service runs, port 3848 may belong to the owner that an agent session was elected to be; it requires the owner token on `/mcp`, which this plugin's URL entry cannot carry, so Codex is refused with a sentence that names the resident service. Reuse an owner only when its `/health` says `owner_token.required.mcp` is false (the PM2 helper's `corsoul-mcp` and the foreground start both are); otherwise start the resident service first.
+
 For the recommended persistent owner, use the plugin's platform helper after reviewing it and
 consenting to global npm installation and startup changes:
 
@@ -39,7 +41,7 @@ preview plus explicit confirmation before modifying the effective Codex instruct
 ## Connector for isolated clients
 
 ```text
-npx -y --package=corsoul@0.1.21 corsoul connect codex --scope=myapp:assistant:v1
+npx -y --package=corsoul@0.1.22 corsoul connect codex --scope=myapp:assistant:v1
 ```
 
 Run the command from the project that should receive the host contract. Codex writes or merges
@@ -95,13 +97,13 @@ share one PGLite directory.
 For a temporary foreground owner, run exactly one server process:
 
 ```text
-npx -y --package=corsoul@0.1.21 corsoul --transport=http --host=127.0.0.1 --port=3848
+npx -y --package=corsoul@0.1.22 corsoul --transport=http --host=127.0.0.1 --port=3848
 ```
 
 Then write the Codex entry with the engine's own writer; no `mcp-remote` bridge is required:
 
 ```text
-npx -y --package=corsoul@0.1.21 corsoul connect http --url=http://127.0.0.1:3848/mcp --config=~/.codex/config.toml --label=codex --scope=<your scope>
+npx -y --package=corsoul@0.1.22 corsoul connect http --url=http://127.0.0.1:3848/mcp --config=~/.codex/config.toml --label=codex --scope=<your scope>
 ```
 
 This writes `[mcp_servers.cortex]` with `url` and `http_headers` (the channel label and your scope);
@@ -128,7 +130,7 @@ itself is not access control.
 ## Verify
 
 ```text
-npx -y --package=corsoul@0.1.21 corsoul doctor
+npx -y --package=corsoul@0.1.22 corsoul doctor
 ```
 
 After restarting the client, remember and recall one fact using the same scope. This round trip—not

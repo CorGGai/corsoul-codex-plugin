@@ -15,6 +15,8 @@ codex plugin add corsoul-codex@corsoul-ai
 開啟一個 PGLite process。啟動、隱私、受審核啟動基線與舊設定遷移請見
 [外掛 README](../plugins/corsoul-codex/README.md)。
 
+corsoul 0.1.22 起，只看 `/health` 健康還不夠。沒有常駐的 `--transport=http` 服務時，3848 可能是某個 agent 工作階段被選出的擁有者，它在 `/mcp` 要擁有者權杖，而本外掛的 URL 條目帶不了——Codex 會被拒，拒絕的那一句會指名常駐服務。`/health` 的 `owner_token.required.mcp` 是 false 才重用（PM2 輔助程式的 `corsoul-mcp` 與前景啟動都是）；否則先起常駐服務。
+
 建議使用外掛內附的 PM2 安裝腳本建立常駐 owner；執行前應先審閱，並明確同意安裝全局 npm
 套件及修改開機啟動設定：
 
@@ -38,7 +40,7 @@ sh plugins/corsoul-codex/scripts/install-corsoul-pm2.sh
 ## 隔離式單一 client：CLI 連接器
 
 ```text
-npx -y --package=corsoul@0.1.21 corsoul connect codex --scope=myapp:assistant:v1
+npx -y --package=corsoul@0.1.22 corsoul connect codex --scope=myapp:assistant:v1
 ```
 
 支援 `codex`、`claude-code`、`cursor`、`cline`、`claude-desktop` 與 `openclaw`。
@@ -83,13 +85,13 @@ Windows 若找不到 `npx`，改用 `command = "npx.cmd"`。儲存後重啟 Code
 若只需臨時前台服務，只啟動一個 loopback server：
 
 ```text
-npx -y --package=corsoul@0.1.21 corsoul --transport=http --host=127.0.0.1 --port=3848
+npx -y --package=corsoul@0.1.22 corsoul --transport=http --host=127.0.0.1 --port=3848
 ```
 
 目前 Codex 可原生連 Streamable HTTP，不需要 `mcp-remote`。用引擎自己的寫入器寫 Codex 的設定：
 
 ```text
-npx -y --package=corsoul@0.1.21 corsoul connect http --url=http://127.0.0.1:3848/mcp --config=~/.codex/config.toml --label=codex --scope=<your scope>
+npx -y --package=corsoul@0.1.22 corsoul connect http --url=http://127.0.0.1:3848/mcp --config=~/.codex/config.toml --label=codex --scope=<your scope>
 ```
 
 這會寫入 `[mcp_servers.cortex]`，帶 `url` 與 `http_headers`（channel 標籤與你的 scope）；
@@ -113,7 +115,7 @@ bearer_token_env_var = "CORSOUL_MCP_TOKEN"
 ## 驗證
 
 ```text
-npx -y --package=corsoul@0.1.21 corsoul doctor
+npx -y --package=corsoul@0.1.22 corsoul doctor
 ```
 
 重啟 client 後，用同一 scope 做一次 remember → recall，再開新 session 召回一次。若多個

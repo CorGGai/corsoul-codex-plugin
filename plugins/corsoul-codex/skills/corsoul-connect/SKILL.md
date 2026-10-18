@@ -10,7 +10,7 @@ Keep one Corsoul HTTP owner on loopback and let every Codex task connect to it. 
 ## Diagnose
 
 1. Request `http://127.0.0.1:3848/health` with a short timeout.
-2. Accept the endpoint only when it reports a healthy Corsoul service. If another process owns the port, report that conflict instead of replacing or killing it.
+2. Accept the endpoint only when it reports a healthy Corsoul service whose `owner_token.required.mcp` is not true. If it is true, the port belongs to an owner an agent session was elected to be (corsoul 0.1.22 or later): offer the PM2 helper or the foreground start instead of connecting. If another process owns the port, report that conflict instead of replacing or killing it.
 3. If the health endpoint works but `corsoul_*` tools are absent, tell the user to open a new Codex task. Plugin MCP discovery happens at task initialization.
 4. If health fails, distinguish the service being stopped from its database backend being unavailable. Docker or Postgres is needed only when that owner is deliberately configured with `DATABASE_URL`; free local PGLite does not need either one.
 
@@ -38,7 +38,7 @@ The helper must install the reviewed compatibility version, start exactly one `c
 For temporary mode, run:
 
 ```text
-npx -y --package=corsoul@0.1.21 corsoul --transport=http --host=127.0.0.1 --port=3848
+npx -y --package=corsoul@0.1.22 corsoul --transport=http --host=127.0.0.1 --port=3848
 ```
 
 Keep it in the foreground unless the user explicitly requests a temporary detached process. On Windows, a user-approved detached process may be launched hidden. Keep stdout and stderr out of the MCP protocol stream and preserve a useful log when practical. Do not pass `DATABASE_URL` unless the user explicitly chooses Postgres.
